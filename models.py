@@ -9,4 +9,5 @@ class Post(SQLModel, table=True):
     created_at: str = Field()
     description: str = Field()
     transaction: float = Field()
+    ong: int = Field(nullable=False)
 
