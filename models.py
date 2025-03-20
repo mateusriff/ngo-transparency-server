@@ -23,45 +23,37 @@ class Profile(ProfileBase, table=True):
     ong: int = Field(nullable=False)
     
     # Relationships
-    gallery_images: List["GalleryImage"] = Relationship(back_populates="profile")
-    skills: List["Skill"] = Relationship(back_populates="profile")
-    causes: List["Cause"] = Relationship(back_populates="profile")
-    sustainable_development_goals: List["SDG"] = Relationship(back_populates="profile")
+    gallery_images: Optional[List["GalleryImage"]] = Relationship(back_populates="profile")
+    skills: Optional[List["Skill"]] = Relationship(back_populates="profile")
+    causes: Optional[List["Cause"]] = Relationship(back_populates="profile")
+    sustainable_development_goals: Optional[List["SDG"]] = Relationship(back_populates="profile")
 
 # New table for GalleryImages
-class GalleryImage(SQLModel, table=True):
+class GalleryImage(SQLModel):
     id: int | None = Field(default=None, primary_key=True)
     url: str = Field()
     profile_id: int = Field(foreign_key="profile.id")
-    
-    profile: "Profile" = Relationship(back_populates="gallery_images")
 
 # Skills table
-class Skill(SQLModel, table=True):
+class Skill(SQLModel):
     id: int | None = Field(default=None, primary_key=True)
     name: str = Field()
     profile_id: int = Field(foreign_key="profile.id")
-    
-    profile: "Profile" = Relationship(back_populates="skills")
 
 # Causes table
-class Cause(SQLModel, table=True):
+class Cause(SQLModel):
     id: int | None = Field(default=None, primary_key=True)
     name: str = Field()
     description: str = Field()
     profile_id: int = Field(foreign_key="profile.id")
-    
-    profile: "Profile" = Relationship(back_populates="causes")
 
 # Sustainable Development Goals table
-class SDG(SQLModel, table=True):
+class SDG(SQLModel):
     id: int | None = Field(default=None, primary_key=True)
     name: str = Field()
     url_ods: str = Field()
     logo_url: Optional[str] = Field(default=None)
     profile_id: int = Field(foreign_key="profile.id")
-    
-    profile: "Profile" = Relationship(back_populates="sustainable_development_goals")
 
 # Post models
 class PostBase(SQLModel):
