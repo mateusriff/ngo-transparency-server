@@ -83,18 +83,3 @@ class PostPatch(SQLModel):
 # ProfileCreate model
 class ProfileCreate(ProfileBase):
     pass
-
-# ProfilePatch model
-class ProfilePatch(SQLModel):
-    username: Optional[str] = Field(default=None)
-    email: Optional[str] = Field(default=None)
-    name: Optional[str] = Field(default=None)
-    description: Optional[str] = Field(default=None)
-    is_formalized: Optional[bool] = Field(default=None)
-    start_year: Optional[int] = Field(default=None)
-    contact_phone: Optional[str] = Field(default=None)
-    instagram_link: Optional[str] = Field(default=None)
-    x_link: Optional[str] = Field(default=None)
-    facebook_link: Optional[str] = Field(default=None)
-    pix_qr_code_link: Optional[str] = Field(default=None)
-    site: Optional[str] = Field(default=None)

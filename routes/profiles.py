@@ -1,7 +1,7 @@
 from database import SessionDep, get_session
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session, select
-from models import Profile, ProfileCreate, ProfilePatch
+from models import Profile, ProfileCreate
 import logging
 import time
 
@@ -55,36 +55,6 @@ def read_profiles(ong_id: int, session: Session = Depends(get_session)):
 
     except Exception as e:
         logger.error(f"Error fetching profiles: {e}")
-        raise HTTPException(status_code=500, detail="Internal Server Error")
-
-@router.patch("/{ong_id}/{id}")
-def update_profile(ong_id: int, id: int, profile: ProfilePatch, session: Session = Depends(get_session)):
-    try:
-        logger.info(f"Request initiated: PATCH /profiles/{ong_id}/{id}")
-        start_time = time.perf_counter()
-
-        db_profile = session.get(Profile, id)
-
-        if not db_profile or db_profile.ong != ong_id:
-            raise HTTPException(status_code=404, detail="Profile not found")
-
-        for key, value in profile.model_dump(exclude_unset=True).items():
-            setattr(db_profile, key, value)
-
-        session.add(db_profile)
-        session.commit()
-        session.refresh(db_profile)
-
-        end_time = time.perf_counter()
-        elapsed_time = end_time - start_time
-
-        logger.info(f"Request finalized successfully: PATCH /profiles/{ong_id}/{id}")
-        logger.info(f"Execution time: {elapsed_time:.6f} seconds")
-
-        return db_profile
-
-    except Exception as e:
-        logger.error(f"Error updating profile: {e}")
         raise HTTPException(status_code=500, detail="Internal Server Error")
 
 @router.delete("/{ong_id}/{id}")
