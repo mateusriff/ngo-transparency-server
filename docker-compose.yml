@@ -34,6 +34,18 @@ services:
     networks:
       - transparencyServer
 
+  ngo-transparency-client:
+    build:
+      context: https://github.com/mateusriff/ngo-transparency-client.git
+      dockerfile: Dockerfile
+    container_name: ngo-transparency-client
+    depends_on:
+      - ngo-transparency-server
+    ports:
+      - "3000:3000"
+    networks:
+      - transparencyServer
+
 networks:
   transparencyServer:
     driver: bridge
