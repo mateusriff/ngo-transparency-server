@@ -8,7 +8,7 @@ class ProfileBase(SQLModel):
     name: str = Field()
     description: str = Field()
     is_formalized: bool = Field(default=False)
-    start_year: int = Field(default=0)
+    start_year: int = Field(default=datetime.now().year)
     contact_phone: str = Field()
     instagram_link: Optional[str] = Field(default=None)
     x_link: Optional[str] = Field(default=None)
