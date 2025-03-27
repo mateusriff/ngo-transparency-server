@@ -1,0 +1,54 @@
+version: "3.9"
+
+services:
+  postgresdb:
+    image: postgres:15
+    container_name: postgres-ngo
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: projetods
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - transparencyServer
+
+  ngo-transparency-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ngo-transparency-server
+    depends_on:
+      - postgresdb
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: projetods
+      POSTGRES_DB: postgres
+      POSTGRES_HOST: postgresdb
+      POSTGRES_PORT: 5432
+    ports:
+      - "8000:8000"
+    networks:
+      - transparencyServer
+
+  ngo-transparency-client:
+    build:
+      context: https://github.com/mateusriff/ngo-transparency-client.git
+      dockerfile: Dockerfile
+    container_name: ngo-transparency-client
+    depends_on:
+      - ngo-transparency-server
+    ports:
+      - "3000:3000"
+    networks:
+      - transparencyServer
+
+networks:
+  transparencyServer:
+    driver: bridge
+
+volumes:
+  postgres_data:
