@@ -16,46 +16,31 @@ class ProfileBase(SQLModel):
     pix_qr_code_link: Optional[str] = Field(default=None)
     site: Optional[str] = Field(default=None)
 
-# Profile model with relationships
-class Profile(ProfileBase, table=True):
-    id: int | None = Field(default=None, primary_key=True)
-    created_at: datetime = Field(default_factory=datetime.now)
-    ong: int = Field(nullable=False)
-    
-    # Relationships
-    gallery_images: Optional[List["GalleryImage"]] = Relationship(back_populates="profile")
-    skills: Optional[List["Skill"]] = Relationship(back_populates="profile")
-    causes: Optional[List["Cause"]] = Relationship(back_populates="profile")
-    sustainable_development_goals: Optional[List["SDG"]] = Relationship(back_populates="profile")
-
-# New table for GalleryImages
-class GalleryImage(SQLModel):
-    id: int | None = Field(default=None, primary_key=True)
-    url: str = Field()
-    profile_id: int = Field(foreign_key="profile.id")
-
-# Skills table
 class Skill(SQLModel):
-    id: int | None = Field(default=None, primary_key=True)
+    id: int  = Field()
     name: str = Field()
-    profile_id: int = Field(foreign_key="profile.id")
-
-# Causes table
+    
 class Cause(SQLModel):
-    id: int | None = Field(default=None, primary_key=True)
+    id: int = Field()
     name: str = Field()
     description: str = Field()
-    profile_id: int = Field(foreign_key="profile.id")
-
-# Sustainable Development Goals table
+    
 class SDG(SQLModel):
-    id: int | None = Field(default=None, primary_key=True)
+    id: int = Field()
     name: str = Field()
     url_ods: str = Field()
     logo_url: Optional[str] = Field(default=None)
-    profile_id: int = Field(foreign_key="profile.id")
-
-# Post models
+    
+class Profile(ProfileBase, table=True):
+    id: int = Field(default=None)
+    created_at: datetime = Field(default_factory=datetime.now)
+    ong: int = Field(nullable=False)
+    
+    gallery_images: Optional[List[str]] = Field(default=[])
+    skills: Optional[List[Skill]] = Field(default=[])
+    causes: Optional[List[Cause]] = Field(default=[])
+    sustainable_development_goals: Optional[List[SDG]] = Field(default=[])
+    
 class PostBase(SQLModel):
     title: str = Field()
     content: str = Field()
@@ -72,6 +57,5 @@ class PostPatch(SQLModel):
     title: Optional[str] = Field(default=None)
     content: Optional[str] = Field(default=None)
 
-# ProfileCreate model
 class ProfileCreate(ProfileBase):
     pass
