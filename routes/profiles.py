@@ -11,12 +11,12 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 @router.post("/")
-def create_profile(profile: ProfileCreate, session: SessionDep):
+def create_profile(profile: Profile, session: SessionDep):
     try:
         logger.info("Request initiated: POST /profiles/")
         start_time = time.perf_counter()
 
-        new_profile = Profile.model_validate(profile)
+        new_profile = profile
         session.add(new_profile)
         session.commit()
         session.refresh(new_profile)
