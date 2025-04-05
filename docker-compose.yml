@@ -42,7 +42,7 @@ services:
     depends_on:
       - ngo-transparency-server
     ports:
-      - "3000:3000"
+      - "5173:80"
     networks:
       - transparencyServer
 
